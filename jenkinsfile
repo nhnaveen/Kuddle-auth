@@ -135,8 +135,10 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t Kuddle-auth .'
-                sh 'docker tag Kuddle-auth:latest 047719614391.dkr.ecr.${AWS_REGION}.amazonaws.com/Kuddle-auth:latest'
+                sh '''
+                    docker build -t Kuddle-auth .
+                    docker tag Kuddle-auth:latest 047719614391.dkr.ecr.${AWS_REGION}.amazonaws.com/Kuddle-auth:latest
+                '''
             }
         }
 

@@ -11,6 +11,23 @@ pipeline {
         maven 'Maven 3.8.5'
     }
 
+    stage('Check and Install Java') {
+        steps {
+            script {
+                def javaInstalled = sh(script: 'java -version', returnStatus: true) == 0
+                if (javaInstalled) {
+                    echo "Java is already installed. Skipping installation."
+                } else {
+                    echo "Java not found. Proceeding with installation..."
+                    sh '''
+                        sudo apt update -y
+                        sudo apt install openjdk-11-jdk -y
+                    '''
+                }
+            }
+        }
+    }
+
     stages {
         stage('Check and Install Maven') {
             steps {
@@ -101,23 +118,6 @@ pipeline {
             }
         }
 
-        stage('Check and Install Java') {
-            steps {
-                script {
-                    def javaInstalled = sh(script: 'java -version', returnStatus: true) == 0
-                    if (javaInstalled) {
-                        echo "Java is already installed. Skipping installation."
-                    } else {
-                        echo "Java not found. Proceeding with installation..."
-                        sh '''
-                            sudo apt update -y
-                            sudo apt install openjdk-11-jdk -y
-                        '''
-                    }
-                }
-            }
-        }
-
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/nhnaveen/Kuddle-auth.git', branch: 'main'
@@ -127,18 +127,16 @@ pipeline {
         stage('Build and package with Maven') {
             steps {
                 sh '''
-                    mvn clean install
-                    mvn clean package
+                  mvn clean install
+                  mvn clean package
                 '''
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh '''
-                    docker build -t Kuddle-auth .
-                    docker tag Kuddle-auth:latest 047719614391.dkr.ecr.${AWS_REGION}.amazonaws.com/Kuddle-auth:latest
-                '''
+                sh 'docker build -t Kuddle-auth .'
+                sh 'docker tag Kuddle-auth:latest 047719614391.dkr.ecr.${AWS_REGION}.amazonaws.com/Kuddle-auth:latest'
             }
         }
 

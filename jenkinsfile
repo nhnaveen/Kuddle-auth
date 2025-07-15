@@ -11,24 +11,24 @@ pipeline {
         maven 'Maven 3.8.5'
     }
 
-    stage('Check and Install Java') {
-        steps {
-            script {
-                def javaInstalled = sh(script: 'java -version', returnStatus: true) == 0
-                if (javaInstalled) {
-                    echo "Java is already installed. Skipping installation."
-                } else {
-                    echo "Java not found. Proceeding with installation..."
-                    sh '''
-                        sudo apt update -y
-                        sudo apt install openjdk-11-jdk -y
-                    '''
+    stages {
+        stage('Check and Install Java') {
+            steps {
+                script {
+                    def javaInstalled = sh(script: 'java -version', returnStatus: true) == 0
+                    if (javaInstalled) {
+                        echo "Java is already installed. Skipping installation."
+                    } else {
+                        echo "Java not found. Proceeding with installation..."
+                        sh '''
+                            sudo apt update -y
+                            sudo apt install openjdk-11-jdk -y
+                        '''
+                    }
                 }
             }
         }
-    }
-
-    stages {
+        
         stage('Check and Install Maven') {
             steps {
                 script {
@@ -117,6 +117,8 @@ pipeline {
                 }
             }
         }
+
+        
 
         stage('Checkout') {
             steps {

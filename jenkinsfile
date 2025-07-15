@@ -127,8 +127,8 @@ pipeline {
         stage('Build and package with Maven') {
             steps {
                 sh '''
-                  mvn clean install
-                  mvn clean package
+                    mvn clean install
+                    mvn clean package
                 '''
             }
         }

@@ -66,41 +66,6 @@ pipeline {
             }
         }
 
-        stage('Check and Install AWS CLI') {
-            steps {
-                script {
-                    def awsCliInstalled = sh(script: 'which aws', returnStatus: true) == 0
-                    if (awsCliInstalled) {
-                        echo "AWS CLI is already installed. Skipping installation."
-                    } else {
-                        echo "AWS CLI not found. Proceeding with installation..."
-                        sh '''
-                            sudo apt update -y
-                            sudo apt install awscli -y
-                        '''
-                    }
-                }
-            }
-        }
-
-//       stage('Configure AWS CLI') {
-//            steps {
-//                script {
-//                    def awsConfigured = sh(script: 'aws sts get-caller-identity', returnStatus: true) == 0
-//                    if (awsConfigured) {
-//                        echo "AWS CLI is already configured. Skipping configuration."
-//                    } else {
-//                        echo "Configuring AWS CLI..."
-//                        sh '''
-//                            aws configure set aws_access_key_id YOUR_ACCESS_KEY_ID
-//                            aws configure set aws_secret_access_key YOUR_SECRET_ACCESS_KEY
-//                            aws configure set default.region ${AWS_REGION}
-//                        '''
-//                    }
-//                }
-//            }
-//       }
-
         stage('Check and Install Git') {
             steps {
                 script {
@@ -118,8 +83,6 @@ pipeline {
             }
         }
 
-        
-
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/nhnaveen/Kuddle-auth.git', branch: 'main'
@@ -134,50 +97,5 @@ pipeline {
                 '''
             }
         }
-
-//       stage('Build Docker Image') {
-//            steps {
-//                sh 'docker build -t Kuddle-auth .'
-//                sh 'docker tag Kuddle-auth:latest 314175685418.dkr.ecr.${AWS_REGION}.amazonaws.com/Kuddle-auth:latest'
-//            }
-//       }
-
-//        stage('Push to Amazon ECR') {
-//            steps {
-//                sh '''
-//                    aws ecr get-login-password --region ${AWS_REGION} | \
-//                    docker login --username AWS --password-stdin 314175685418.dkr.ecr.${AWS_REGION}.amazonaws.com
-//                    docker push 314175685418.dkr.ecr.${AWS_REGION}.amazonaws.com/Kuddle-auth:latest
-//                '''
-//            }
-//       }
-
-//        stage('Deploy to ECS') {
-//            steps {
-//                sh '''
-//                    aws ecs update-service \
-//                    --cluster Kuddle-auth-cluster \
-//                    --service Kuddle-auth-service \
-//                    --force-new-deployment \
-//                    --region ${AWS_REGION}
-//                '''
-//            }
-//        }
-// 
-//    }
-//    post {
-//       always {
-//            echo 'Cleaning up...'
-//            sh 'docker rmi 314175685418.dkr.ecr.${AWS_REGION}.amazonaws.com || true'
-//        }
-//        success {
-//            echo 'Pipeline completed successfully!'
-//        }
-//        failure {
-//            echo 'Pipeline failed!'
-//        }
-//    }
+    }
 }
-
-
-// Note: Ensure that the AWS CLI is configured with the necessary permissions to access ECR and ECS.

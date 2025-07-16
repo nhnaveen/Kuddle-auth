@@ -83,7 +83,7 @@ pipeline {
             }
         }
 
-//        stage('Configure AWS CLI') {
+//       stage('Configure AWS CLI') {
 //            steps {
 //                script {
 //                    def awsConfigured = sh(script: 'aws sts get-caller-identity', returnStatus: true) == 0
@@ -99,7 +99,7 @@ pipeline {
 //                    }
 //                }
 //            }
-//        }
+//       }
 
         stage('Check and Install Git') {
             steps {
@@ -135,12 +135,12 @@ pipeline {
             }
         }
 
-//        stage('Build Docker Image') {
+//       stage('Build Docker Image') {
 //            steps {
 //                sh 'docker build -t Kuddle-auth .'
 //                sh 'docker tag Kuddle-auth:latest 314175685418.dkr.ecr.${AWS_REGION}.amazonaws.com/Kuddle-auth:latest'
 //            }
-//        }
+//       }
 
 //        stage('Push to Amazon ECR') {
 //            steps {
@@ -150,7 +150,7 @@ pipeline {
 //                    docker push 314175685418.dkr.ecr.${AWS_REGION}.amazonaws.com/Kuddle-auth:latest
 //                '''
 //            }
-//        }
+//       }
 
 //        stage('Deploy to ECS') {
 //            steps {
@@ -163,8 +163,8 @@ pipeline {
 //                '''
 //            }
 //        }
+// 
 //    }
-    
 //    post {
 //       always {
 //            echo 'Cleaning up...'
@@ -178,4 +178,6 @@ pipeline {
 //        }
 //    }
 }
+
+
 // Note: Ensure that the AWS CLI is configured with the necessary permissions to access ECR and ECS.

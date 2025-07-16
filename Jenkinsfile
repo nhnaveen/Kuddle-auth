@@ -46,26 +46,6 @@ pipeline {
             }
         }
 
-        stage('Check and Install Docker') {
-            steps {
-                script {
-                    def dockerInstalled = sh(script: 'which docker', returnStatus: true) == 0
-                    if (mavenInstalled) {
-                        echo "Docker is already installed. Skipping installation."
-                    } else {
-                        echo "Docker not found. Proceeding with installation..."
-                        sh '''
-                            sudo apt update -y
-                            sudo apt install docker.io -y
-                            sudo systemctl start docker
-                            sudo systemctl enable docker
-                            sudo usermod -aG docker ubuntu
-                        '''
-                    }
-                }
-            }
-        }
-
         stage('Check and Install Git') {
             steps {
                 script {
